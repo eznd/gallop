@@ -1,0 +1,14 @@
+version: '2'
+
+services:
+    jenkins:
+        container_name: gallop
+        build: .
+        image: gallop
+        ports:
+            - 9101:9101
+        networks:
+            - common-network
+networks:
+    common-network:
+        driver: bridge

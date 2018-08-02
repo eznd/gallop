@@ -33,7 +33,8 @@ func New(rootPath string, host string, port string) *Server {
 
 // StartRouter starts REST server
 func (s *Server) StartRouter() {
-	s.Router.GET("/reports/", s.handleStatic)
+	s.Router.GET("/status", s.status)
+	s.Router.GET("/reports/", s.handleStaticRoot)
 	s.Router.Use(static.Serve("/reports", static.LocalFile(s.RootPath+"static/reports/", true)))
 	s.Router.POST("/create", s.createReport)
 
@@ -41,9 +42,14 @@ func (s *Server) StartRouter() {
 	fmt.Print(err)
 }
 
-func (s *Server) handleStatic(c *gin.Context) {
+func (s *Server) handleStaticRoot(c *gin.Context) {
 	c.AbortWithStatus(http.StatusForbidden)
 }
+
+func (s *Server) status(c *gin.Context) {
+	c.JSON(http.StatusOK, "ok")
+}
+
 
 func (s *Server) createReport(c *gin.Context) {
 	data, _ := c.GetRawData()
